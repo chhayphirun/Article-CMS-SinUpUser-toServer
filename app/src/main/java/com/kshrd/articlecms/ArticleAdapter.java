@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kshrd.articlecms.entity.ArticleResponse;
@@ -21,9 +22,15 @@ import butterknife.ButterKnife;
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder> {
 
     List<ArticleResponse.Article> articleList;
+    MyClickListener clickListener;
 
     public ArticleAdapter() {
         articleList = new ArrayList<>();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        clickListener = (MyClickListener) recyclerView.getContext();
     }
 
     @Override
@@ -56,11 +63,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         this.articleList.clear();
     }
 
+    public ArticleResponse.Article getArticle(int pos){
+        return this.articleList.get(pos);
+    }
+
 
     /**
      * View Holder
      */
-    class ArticleViewHolder extends RecyclerView.ViewHolder{
+    class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.tvTitle)
         TextView tvTitle;
@@ -68,9 +79,18 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         @BindView(R.id.tvDescription)
         TextView tvDescription;
 
+        @BindView(R.id.ivMore)
+        ImageView ivMore;
+
         public ArticleViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            ivMore.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            clickListener.onClicked(getAdapterPosition(), view);
         }
     }
 

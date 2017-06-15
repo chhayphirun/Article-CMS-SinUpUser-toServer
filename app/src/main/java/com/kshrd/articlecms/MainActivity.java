@@ -4,11 +4,15 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.kshrd.articlecms.entity.ArticleResponse;
 import com.kshrd.articlecms.webservice.ArticleService;
@@ -20,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements TextWatcher{
+public class MainActivity extends AppCompatActivity implements TextWatcher, MyClickListener {
 
     @BindView(R.id.rvArticle)
     RecyclerView rvArticle;
@@ -99,5 +103,28 @@ public class MainActivity extends AppCompatActivity implements TextWatcher{
     @Override
     public void afterTextChanged(Editable editable) {
 
+    }
+
+    @Override
+    public void onClicked(int position, View view) {
+        final ArticleResponse.Article article = articleAdapter.getArticle(position);
+        PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
+        popupMenu.inflate(R.menu.my_menu);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.delete:
+                        Toast.makeText(MainActivity.this, String.valueOf(article.getId()), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.update:
+                        Toast.makeText(MainActivity.this, "Update", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+
+        });
+        popupMenu.show();
     }
 }
