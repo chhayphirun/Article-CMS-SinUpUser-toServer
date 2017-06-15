@@ -52,6 +52,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         notifyDataSetChanged();
     }
 
+    public void clearList(){
+        this.articleList.clear();
+    }
+
 
     /**
      * View Holder
