@@ -1,6 +1,8 @@
 package com.kshrd.articlecms;
 
 import android.os.Handler;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,8 +17,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.kshrd.articlecms.entity.ArticleResponse;
+import com.kshrd.articlecms.entity.UpdateArticleResponse;
+import com.kshrd.articlecms.event.ArticleUpdateEvent;
+import com.kshrd.articlecms.form.UpdateArticleForm;
 import com.kshrd.articlecms.webservice.ArticleService;
 import com.kshrd.articlecms.webservice.ServiceGenerator;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements TextWatcher, MyCl
                 ArticleResponse articleResponse = response.body();
                 articleAdapter.clearList();
                 articleAdapter.addMoreItems(articleResponse.getArticlelist());
-                Log.e("ooooo", articleAdapter.getItemCount()+ "");
 
             }
 
@@ -118,7 +126,10 @@ public class MainActivity extends AppCompatActivity implements TextWatcher, MyCl
                         Toast.makeText(MainActivity.this, String.valueOf(article.getId()), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.update:
-                        Toast.makeText(MainActivity.this, "Update", Toast.LENGTH_SHORT).show();
+                        DialogFragment fragment = MyDialogFragment.newInstance(article);
+                        fragment.show(getSupportFragmentManager(), "MyDialogFragment");
+
+
                         break;
                 }
                 return true;
@@ -126,5 +137,43 @@ public class MainActivity extends AppCompatActivity implements TextWatcher, MyCl
 
         });
         popupMenu.show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onArticleUpdateEvent(ArticleUpdateEvent event){
+        final ArticleResponse.Article article = event.getArticle();
+        UpdateArticleForm form = new UpdateArticleForm(
+            article.getTitle(),
+                article.getDescription(),
+                article.getAuthor().getId(),
+                article.getCategory().getId(),
+                article.getStatus(),
+                article.getImage()
+        );
+
+        Call<UpdateArticleResponse> updateArticle = articleService.updateArticle(article.getId(), form);
+        updateArticle.enqueue(new Callback<UpdateArticleResponse>() {
+            @Override
+            public void onResponse(Call<UpdateArticleResponse> call, Response<UpdateArticleResponse> response) {
+                articleAdapter.updateItemOf(response.body().getArticle());
+            }
+
+            @Override
+            public void onFailure(Call<UpdateArticleResponse> call, Throwable t) {
+
+            }
+        });
     }
 }

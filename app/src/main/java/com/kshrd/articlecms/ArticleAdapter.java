@@ -1,6 +1,7 @@
 package com.kshrd.articlecms;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,19 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
 
     public ArticleResponse.Article getArticle(int pos){
         return this.articleList.get(pos);
+    }
+
+    public void updateItemOf(ArticleResponse.Article article){
+
+        for (ArticleResponse.Article temp: this.articleList) {
+            if (temp.getId() == article.getId()){
+                temp.setTitle(article.getTitle());
+                int position = this.articleList.indexOf(temp);
+                notifyItemChanged(position);
+                return;
+            }
+        }
+
     }
 
 

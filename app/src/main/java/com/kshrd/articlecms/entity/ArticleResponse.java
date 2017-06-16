@@ -1,5 +1,8 @@
 package com.kshrd.articlecms.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -51,7 +54,7 @@ public class ArticleResponse {
         this.pagination = pagination;
     }
 
-    public static class Author {
+    public static class Author implements Parcelable {
         @SerializedName("ID")
         private int id;
         @SerializedName("NAME")
@@ -132,9 +135,67 @@ public class ArticleResponse {
         public void setImageUrl(String imageUrl) {
             this.imageUrl = imageUrl;
         }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.id);
+            dest.writeString(this.name);
+            dest.writeString(this.email);
+            dest.writeString(this.gender);
+            dest.writeString(this.telephone);
+            dest.writeString(this.status);
+            dest.writeString(this.facebookId);
+            dest.writeString(this.imageUrl);
+        }
+
+        public Author() {
+        }
+
+        protected Author(Parcel in) {
+            this.id = in.readInt();
+            this.name = in.readString();
+            this.email = in.readString();
+            this.gender = in.readString();
+            this.telephone = in.readString();
+            this.status = in.readString();
+            this.facebookId = in.readString();
+            this.imageUrl = in.readString();
+        }
+
+        public static final Parcelable.Creator<Author> CREATOR = new Parcelable.Creator<Author>() {
+            @Override
+            public Author createFromParcel(Parcel source) {
+                return new Author(source);
+            }
+
+            @Override
+            public Author[] newArray(int size) {
+                return new Author[size];
+            }
+        };
+
+        @Override
+        public String toString() {
+            return "Author{" +
+                    "id=" + id +
+                    ", name='" + name + '\'' +
+                    ", email='" + email + '\'' +
+                    ", gender='" + gender + '\'' +
+                    ", telephone='" + telephone + '\'' +
+                    ", status='" + status + '\'' +
+                    ", facebookId='" + facebookId + '\'' +
+                    ", imageUrl='" + imageUrl + '\'' +
+                    '}';
+        }
     }
 
-    public static class Category {
+    public static class Category implements Parcelable {
         @SerializedName("ID")
         private int id;
         @SerializedName("NAME")
@@ -155,9 +216,41 @@ public class ArticleResponse {
         public void setName(String name) {
             this.name = name;
         }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.id);
+            dest.writeString(this.name);
+        }
+
+        public Category() {
+        }
+
+        protected Category(Parcel in) {
+            this.id = in.readInt();
+            this.name = in.readString();
+        }
+
+        public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>() {
+            @Override
+            public Category createFromParcel(Parcel source) {
+                return new Category(source);
+            }
+
+            @Override
+            public Category[] newArray(int size) {
+                return new Category[size];
+            }
+        };
     }
 
-    public static class Article {
+    public static class Article implements Parcelable {
         @SerializedName("ID")
         private int id;
         @SerializedName("TITLE")
@@ -166,11 +259,11 @@ public class ArticleResponse {
         private String description;
         @SerializedName("CREATED_DATE")
         private String createdDate;
-        @SerializedName("Author")
+        @SerializedName("AUTHOR")
         private Author author;
         @SerializedName("STATUS")
         private String status;
-        @SerializedName("Category")
+        @SerializedName("CATEGORY")
         private Category category;
         @SerializedName("IMAGE")
         private String image;
@@ -237,6 +330,64 @@ public class ArticleResponse {
 
         public void setImage(String image) {
             this.image = image;
+        }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.id);
+            dest.writeString(this.title);
+            dest.writeString(this.description);
+            dest.writeString(this.createdDate);
+            dest.writeParcelable(this.author, flags);
+            dest.writeString(this.status);
+            dest.writeParcelable(this.category, flags);
+            dest.writeString(this.image);
+        }
+
+        public Article() {
+        }
+
+        protected Article(Parcel in) {
+            this.id = in.readInt();
+            this.title = in.readString();
+            this.description = in.readString();
+            this.createdDate = in.readString();
+            this.author = in.readParcelable(Author.class.getClassLoader());
+            this.status = in.readString();
+            this.category = in.readParcelable(Category.class.getClassLoader());
+            this.image = in.readString();
+        }
+
+        public static final Parcelable.Creator<Article> CREATOR = new Parcelable.Creator<Article>() {
+            @Override
+            public Article createFromParcel(Parcel source) {
+                return new Article(source);
+            }
+
+            @Override
+            public Article[] newArray(int size) {
+                return new Article[size];
+            }
+        };
+
+        @Override
+        public String toString() {
+            return "Article{" +
+                    "id=" + id +
+                    ", title='" + title + '\'' +
+                    ", description='" + description + '\'' +
+                    ", createdDate='" + createdDate + '\'' +
+                    ", author=" + author +
+                    ", status='" + status + '\'' +
+                    ", category=" + category +
+                    ", image='" + image + '\'' +
+                    '}';
         }
     }
 
