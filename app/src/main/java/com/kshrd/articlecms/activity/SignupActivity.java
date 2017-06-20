@@ -30,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -49,7 +50,7 @@ public class SignupActivity extends AppCompatActivity {
     private SpotsDialog dialog;
 
     @BindView(R.id.ivThumbnail)
-    ImageView ivThumbnail;
+    CircleImageView ivThumbnail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

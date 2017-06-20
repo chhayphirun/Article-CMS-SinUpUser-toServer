@@ -38,4 +38,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 
     compile 'com.github.d-max:spots-dialog:0.7@aar'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 }
