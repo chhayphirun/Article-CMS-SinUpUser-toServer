@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -13,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
@@ -23,6 +26,7 @@ import com.kshrd.articlecms.webservice.ServiceGenerator;
 import java.io.File;
 import java.security.Permission;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
@@ -43,6 +47,9 @@ public class SignupActivity extends AppCompatActivity {
     private String imagePath;
     private ImageService imageService;
     private SpotsDialog dialog;
+
+    @BindView(R.id.ivThumbnail)
+    ImageView ivThumbnail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +133,8 @@ public class SignupActivity extends AppCompatActivity {
         if (cursor.moveToFirst()){
             int columnIndex = cursor.getColumnIndex(pathColumn[0]);
             imagePath = cursor.getString(columnIndex);
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            ivThumbnail.setImageBitmap(bitmap);
         }
     }
 
