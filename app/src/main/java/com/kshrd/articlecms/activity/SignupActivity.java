@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.kshrd.articlecms.R;
+import com.kshrd.articlecms.util.RetrofitUtil;
 import com.kshrd.articlecms.webservice.ImageService;
 import com.kshrd.articlecms.webservice.ServiceGenerator;
 
@@ -63,6 +64,11 @@ public class SignupActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnSubmit)
     void onSubmitClicked(){
+
+        // Email Filed
+        RequestBody email = RetrofitUtil.toRequestBody("admin@gmail.com");
+
+
 
         File file = new File(imagePath);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
