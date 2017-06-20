@@ -53,6 +53,9 @@ public class SignupActivity extends AppCompatActivity {
     @BindView(R.id.ivThumbnail)
     CircleImageView ivThumbnail;
 
+    
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,8 @@ public class SignupActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         imageService = ServiceGenerator.createService(ImageService.class);
         dialog = new SpotsDialog(this, "Please wait...");
+
+
     }
 
     @OnClick(R.id.btnSubmit)
@@ -72,7 +77,7 @@ public class SignupActivity extends AppCompatActivity {
 
         File file = new File(imagePath);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("FILE", file.getName(), requestBody);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("PHOTO", file.getName(), requestBody);
 
 
         Call<JsonObject> uploadImage = imageService.uploadSingleImage(body);

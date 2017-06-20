@@ -19,6 +19,11 @@ public interface UserService {
     @POST("/v1/api/users")
     Call<JsonObject> createUser(
             @Part("EMAIL") RequestBody email,
+            @Part("USERNAME") RequestBody username,
+            @Part("PASSWORD") RequestBody password,
+            @Part("GENDER") RequestBody gender,
+            @Part("FACEBOOK_ID") RequestBody fbId,
+            @Part("TELEPHONE") RequestBody tel,
             @Part MultipartBody.Part photo
     );
 
